@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paginated Table with Add Button</title>
+    <style>
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .controls {
+            width: 80%;
+            margin: 20px auto;
+            text-align: right;
+        }
+        button:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <table id="employee-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Location</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Initial Rows to be replaced by JavaScript -->
+        </tbody>
+    </table>
+
+    <div class="controls">
+        <button id="prev-btn" disabled>Previous</button>
+        <button id="next-btn">Next</button>
+    </div>
+
+    <script>
+        const tableData = [
+            [
+                {id: '101', email: 'john@example.com', department: 'HR', name: 'John Doe', role: 'Manager', location: 'New York'},
+                {id: '102', email: 'jane@example.com', department: 'IT', name: 'Jane Smith', role: 'Developer', location: 'San Francisco'},
+                {id: '103', email: 'alice@example.com', department: 'Finance', name: 'Alice Brown', role: 'Accountant', location: 'Chicago'},
+                {id: '104', email: 'bob@example.com', department: 'Marketing', name: 'Bob White', role: 'Analyst', location: 'Los Angeles'},
+                {id: '105', email: 'eve@example.com', department: 'Sales', name: 'Eve Black', role: 'Sales Manager', location: 'Houston'},
+                {id: '106', email: 'carol@example.com', department: 'Support', name: 'Carol Green', role: 'Support Engineer', location: 'Miami'},
+            ],
+            [
+                {id: '107', email: 'dan@example.com', department: 'HR', name: 'Dan Red', role: 'Recruiter', location: 'New York'},
+                {id: '108', email: 'nina@example.com', department: 'IT', name: 'Nina Blue', role: 'Tester', location: 'San Francisco'},
+                {id: '109', email: 'susan@example.com', department: 'Finance', name: 'Susan Yellow', role: 'Financial Analyst', location: 'Chicago'},
+                {id: '110', email: 'tim@example.com', department: 'Marketing', name: 'Tim Orange', role: 'Content Writer', location: 'Los Angeles'},
+                {id: '111', email: 'amy@example.com', department: 'Sales', name: 'Amy Violet', role: 'Sales Representative', location: 'Houston'},
+                {id: '112', email: 'lisa@example.com', department: 'Support', name: 'Lisa Green', role: 'Customer Support', location: 'Miami'},
+            ],
+            [
+                {id: '113', email: 'mark@example.com', department: 'HR', name: 'Mark Pink', role: 'Manager', location: 'New York'},
+                {id: '114', email: 'johnny@example.com', department: 'IT', name: 'Johnny Gold', role: 'Developer', location: 'San Francisco'},
+                {id: '115', email: 'mike@example.com', department: 'Finance', name: 'Mike Silver', role: 'Accountant', location: 'Chicago'},
+                {id: '116', email: 'karen@example.com', department: 'Marketing', name: 'Karen White', role: 'Analyst', location: 'Los Angeles'},
+                {id: '117', email: 'sam@example.com', department: 'Sales', name: 'Sam Purple', role: 'Sales Manager', location: 'Houston'},
+                {id: '118', email: 'jen@example.com', department: 'Support', name: 'Jen Brown', role: 'Support Engineer', location: 'Miami'},
+            ]
+        ];
+
+        let currentPage = 0;
+
+        function renderTable(page) {
+            const tbody = document.querySelector('#employee-table tbody');
+            tbody.innerHTML = '';
+
+            tableData[page].forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.id}</td>
+                    <td>${row.email}</td>
+                    <td>${row.department}</td>
+                    <td>${row.name}</td>
+                    <td>${row.role}</td>
+                    <td>${row.location}</td>
+                    <td><button class="add-btn">Add</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('prev-btn').disabled = (page === 0);
+            document.getElementById('next-btn').disabled = (page === tableData.length - 1);
+        }
+
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            if (currentPage > 0) {
+                currentPage--;
+                renderTable(currentPage);
+            }
+        });
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            if (currentPage < tableData.length - 1) {
+                currentPage++;
+                renderTable(currentPage);
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            if (event.target && event.target.className === 'add-btn') {
+                alert('Add button clicked for ' + event.target.closest('tr').children[3].textContent);
+            }
+        });
+
+        renderTable(currentPage);
+    </script>
+</body>
+</html>
